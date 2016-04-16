@@ -15,10 +15,16 @@
     "es6",
     "babel"
   ],
-  "author": "Toni Aho",
+  "author": "Toni Aho <tojuaho@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/semitaho/tcomponents/issues"
   },
-  "homepage": "https://github.com/semitaho/tcomponents"
+  "homepage": "https://github.com/semitaho/tcomponents",
+  "devDependencies": {
+  },
+  "dependencies": {
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1"
+  }
 }
