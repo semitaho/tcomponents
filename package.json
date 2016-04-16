@@ -4,7 +4,8 @@
   "description": "Common reactjs components for tfamily usage.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -21,10 +22,10 @@
     "url": "https://github.com/semitaho/tcomponents/issues"
   },
   "homepage": "https://github.com/semitaho/tcomponents",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "react": "^15.0.1",
-    "react-dom": "^15.0.1"
+    "react-dom": "^15.0.1",
+    "webpack": "^1.13.0"
   }
 }
