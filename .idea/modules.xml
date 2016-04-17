@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/dist/dist.iml" filepath="$PROJECT_DIR$/dist/dist.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/tcomponents.iml" filepath="$PROJECT_DIR$/src/tcomponents.iml" />
     </modules>
   </component>
 </project>

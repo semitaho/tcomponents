@@ -1,3 +1,2 @@
-export default function alko(){
-  return 7;
-}
+import Gmap from './lib/gmap.js';
+export {Gmap};

@@ -1,10 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import ItemUtils from './../utils/itemutils.js';
-import UIUtils from './../utils/uiutils.js';
-
-class Map extends React.Component {
+class Gmap extends React.Component {
 
   constructor() {
     super();
@@ -15,7 +12,7 @@ class Map extends React.Component {
 
   render() {
     return (
-      <div ref="map" id={this.props.id} className={this.props.className}></div>
+      <div id={this.props.id} className={this.props.className}></div>
     );
   }
 
@@ -165,11 +162,7 @@ class Map extends React.Component {
     if (this.props.route) {
       this.createRoute(this.props.route);
     }
-
-    if (this.props.kadonneet && this.props.kadonneet.length > 0) {
-      this.drawKadonneet(mapOptions);
-    }
-
+    
     if (this.props.center) {
       this.updateCenter((this.props));
     }
@@ -384,5 +377,6 @@ class Map extends React.Component {
 
 }
 
-Map.defaultProps = {className: '', id: 'map-havainnot', scrollwheel: false, initialZoom: 12};
-export default Map;
+Gmap.propTypes = {id: React.PropTypes.string.isRequired};
+Gmap.defaultProps = {className: '', scrollwheel: false, initialZoom: 12};
+export default Gmap;
