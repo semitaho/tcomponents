@@ -7,7 +7,6 @@ class Gmap extends React.Component {
     super();
     this.markers = [];
     this.map = null;
-    this.createFindingMarker = this.createFindingMarker.bind(this);
   }
 
   render() {
@@ -20,22 +19,10 @@ class Gmap extends React.Component {
     if (this.map) {
       return;
     }
-    var domNode = ReactDOM.findDOMNode(this.refs.map);
+    let domNode = ReactDOM.findDOMNode(this);
     this.map = new google.maps.Map(domNode, mapOptions);
   }
 
-  drawKadonneet(mapOptions) {
-    mapOptions.center = {lat: 65.7770391, lng: 27.1159877};
-    this.renderMap(mapOptions);
-    const resize = () => {
-      UIUtils.calcHeight(this.props.id);
-      this.map.setCenter({lat: 65.7770391, lng: 27.1159877});
-    };
-    this.createKadonneet();
-    resize();
-
-    google.maps.event.addDomListener(window, "resize", resize);
-  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.circle) {
@@ -45,6 +32,7 @@ class Gmap extends React.Component {
       this.updateCenter(nextProps);
     }
     if (nextProps.marker) {
+      console.log('hilu hilu hei');
       this.drawMarker(nextProps.marker);
     }
   }
@@ -109,6 +97,8 @@ class Gmap extends React.Component {
       mapTypeId: google.maps.MapTypeId.TERRAIN,
       zoom: this.props.initialZoom
     };
+    this.renderMap(mapOptions);
+
 
     const calcHeight = () => {
       let h = $(window).height();
@@ -117,26 +107,9 @@ class Gmap extends React.Component {
       let footerHeight = $('#footer').height();
       $('#' + this.props.id).height(h - mapY - footerHeight - 10);
     };
-    UIUtils.calculateModalMapHeight(this.props.id);
-    console.log('aijaa');
-
-    if (this.props.katoamispaikka) {
-      this.renderMap(mapOptions);
-      let markerIcon = {
-        scale: 7,
-        animation: google.maps.Animation.DROP,
-        path: google.maps.SymbolPath.CIRCLE
-      };
-      this.katoamis = new google.maps.Marker({
-        position: {lat: this.props.katoamispaikka.lat, lng: this.props.katoamispaikka.lng},
-        map: this.map,
-        animation: google.maps.Animation.DROP,
-        icon: markerIcon
-      });
-    }
+    //  UIUtils.calculateModalMapHeight(this.props.id);
 
     if (this.props.marker) {
-      this.renderMap(mapOptions);
       this.drawMarker(this.props.marker);
     }
 
@@ -144,25 +117,10 @@ class Gmap extends React.Component {
       this.renderMap(mapOptions);
       this.drawCircle(this.props.circle, this.props.radius);
     }
-
-    if (this.props.findings && this.props.findings.length > 0) {
-      UIUtils.calculateModalMapHeight(this.props.id);
-      //let center = this.calculateCenter(this.props.findings);
-      //mapOptions.center = center;
-      this.renderMap(mapOptions);
-      this.createMarkers(this.props.findings);
-      google.maps.event.addDomListener(window, "resize", () => {
-        UIUtils.calculateModalMapHeight(this.props.id);
-        this.map.setCenter(this.props.center);
-      });
-
-      // google.maps.event.addDomListener(window, "resize", resize);
-    }
-
     if (this.props.route) {
       this.createRoute(this.props.route);
     }
-    
+
     if (this.props.center) {
       this.updateCenter((this.props));
     }
