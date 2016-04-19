@@ -35,6 +35,16 @@ class Gmap extends React.Component {
       console.log('hilu hilu hei');
       this.drawMarker(nextProps.marker);
     }
+    
+    this.checkRefreshed();
+  }
+
+  checkRefreshed(){
+    if (this.map && this.props.onUpdated){
+      console.log('on updated...');
+      this.props.onUpdated(this.map);
+    }
+
   }
 
   updateCenter(props) {
