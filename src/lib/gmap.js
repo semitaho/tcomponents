@@ -5,6 +5,8 @@ class Gmap extends React.Component {
 
   constructor() {
     super();
+    this.directionsRenderer = new google.maps.DirectionsRenderer();
+    this.directionsRenderer.setOptions({draggable: false, suppressMarkers: false});
     this.markers = [];
     this.map = null;
   }
@@ -33,6 +35,11 @@ class Gmap extends React.Component {
       return;
     }
 
+    if (nextProps.direction) {
+      console.log('map - direction', nextProps.direction);
+      this.updateDirection(nextProps.direction);
+    }
+
     if (nextProps.circle) {
       this.drawCircle(nextProps.circle, nextProps.radius);
       this.props.onUpdated(this.map);
@@ -52,6 +59,18 @@ class Gmap extends React.Component {
       console.log('on updated...');
     }
 
+  }
+
+  updateDirection(direction) {
+
+    if (direction !== undefined && direction !== null) {
+      this.directionsRenderer.setMap(this.map);
+      let dirArray = [direction.start, direction.end];
+      console.log('array', dirArray);
+      this.directionsRenderer.setDirections(dirArray);
+    } else {
+      this.directionsRenderer.setMap(null);
+    }
   }
 
   updateCenter(props) {
