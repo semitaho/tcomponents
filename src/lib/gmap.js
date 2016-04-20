@@ -23,26 +23,33 @@ class Gmap extends React.Component {
     this.map = new google.maps.Map(domNode, mapOptions);
   }
 
+  componentDidUpdate() {
+    console.log('component did update');
+  }
 
   componentWillReceiveProps(nextProps) {
+
+    if (JSON.stringify(nextProps) === JSON.stringify(this.props)) {
+      return;
+    }
+
     if (nextProps.circle) {
       this.drawCircle(nextProps.circle, nextProps.radius);
+      this.props.onUpdated(this.map);
+
     }
     if (nextProps.center) {
       this.updateCenter(nextProps);
     }
     if (nextProps.marker) {
-      console.log('hilu hilu hei');
       this.drawMarker(nextProps.marker);
+      this.props.onUpdated(this.map);
     }
-    
-    this.checkRefreshed();
   }
 
-  checkRefreshed(){
-    if (this.map && this.props.onUpdated){
+  checkRefreshed() {
+    if (this.map && this.props.onUpdated) {
       console.log('on updated...');
-      this.props.onUpdated(this.map);
     }
 
   }
