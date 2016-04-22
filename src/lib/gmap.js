@@ -58,20 +58,20 @@ class Gmap extends React.Component {
   }
 
   checkRefreshed() {
-    if (this.map && this.props.onUpdated) {
-      console.log('on updated...');
-    }
 
   }
 
   updateDirection(direction) {
+    if (null === direction.end) {
+      this.directionsRenderer.setMap(null);
+      return;
+    }
     let directionsService = new google.maps.DirectionsService();
     let request = {
       origin: direction.start,
       destination: direction.end,
       travelMode: google.maps.TravelMode.WALKING
     };
-    console.log('request', request);
     directionsService.route(request, (direction, status) => {
       if (status == google.maps.DirectionsStatus.OK) {
         this.directionsRenderer.setMap(this.map);
@@ -105,7 +105,6 @@ class Gmap extends React.Component {
     });
 
     if (this.props.radiuschanged) {
-      console.log('radius changes...');
       this.cityCircle.addListener('radius_changed', _ => {
         this.props.radiuschanged(this.cityCircle.getRadius());
 
@@ -170,13 +169,12 @@ class Gmap extends React.Component {
     if (this.props.center) {
       this.updateCenter((this.props));
     }
-    if (this.props.onmapclick) {
-      google.maps.event.addListener(this.map, 'click', this.props.onmapclick);
+    if (this.props.onMapClick) {
+      google.maps.event.addListener(this.map, 'click', this.props.onMapClick);
     }
 
     if (this.props.onClick) {
       google.maps.event.addListener(this.map, 'click', event => {
-        console.log("Latitude: " + event.latLng.lat() + " " + ", longitude: " + event.latLng.lng());
         this.props.onClick(event.latLng);
         this.createFindingMarker({lat: event.latLng.lat(), lng: event.latLng.lng()});
       });
@@ -242,7 +240,6 @@ class Gmap extends React.Component {
     var infowindow = new google.maps.InfoWindow();
 
     this.props.kadonneet.forEach(finding => {
-        console.log('findingType', finding.type);
         var markerIcon = {
           scale: 7,
           path: google.maps.SymbolPath.CIRCLE
@@ -292,7 +289,6 @@ class Gmap extends React.Component {
     };
 
     findings.forEach(finding => {
-        console.log('findingType', finding.type);
         var markerIcon = null;
         switch (finding.type) {
           case 3:
@@ -350,7 +346,6 @@ class Gmap extends React.Component {
 
   convertTimestampToTime(timestamp) {
     var dt = new Date(timestamp);
-    console.log('dt', dt);
     var year = dt.getFullYear();
     var month = dt.getMonth() + 1;
     var day = dt.getDate();
