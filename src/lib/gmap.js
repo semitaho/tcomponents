@@ -23,6 +23,9 @@ class Gmap extends React.Component {
     }
     let domNode = ReactDOM.findDOMNode(this);
     this.map = new google.maps.Map(domNode, mapOptions);
+    if (this.props.onMapCreated) {
+      this.props.onMapCreated(this.map);
+    }
   }
 
   componentDidUpdate() {
@@ -62,15 +65,22 @@ class Gmap extends React.Component {
   }
 
   updateDirection(direction) {
+    let directionsService = new google.maps.DirectionsService();
+    let request = {
+      origin: direction.start,
+      destination: direction.end,
+      travelMode: google.maps.TravelMode.WALKING
+    };
+    console.log('request', request);
+    directionsService.route(request, (direction, status) => {
+      if (status == google.maps.DirectionsStatus.OK) {
+        this.directionsRenderer.setMap(this.map);
+        this.directionsRenderer.setDirections(direction);
+      } else {
+        this.directionsRenderer.setMap(null);
+      }
+    });
 
-    if (direction !== undefined && direction !== null) {
-      this.directionsRenderer.setMap(this.map);
-      let dirArray = [direction.start, direction.end];
-      console.log('array', dirArray);
-      this.directionsRenderer.setDirections(dirArray);
-    } else {
-      this.directionsRenderer.setMap(null);
-    }
   }
 
   updateCenter(props) {
