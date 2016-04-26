@@ -6,7 +6,7 @@ class Gmap extends React.Component {
   constructor() {
     super();
     this.directionsRenderer = new google.maps.DirectionsRenderer();
-    this.directionsRenderer.setOptions({draggable: false, suppressMarkers: false});
+    this.directionsRenderer.setOptions({draggable: false, suppressMarkers: true});
     this.markers = [];
     this.map = null;
   }
@@ -28,36 +28,43 @@ class Gmap extends React.Component {
     }
   }
 
-  componentDidUpdate() {
-    console.log('component did update');
+  shouldComponentUpdate(nextProps, nextState) {
+    return (JSON.stringify(nextProps) !== JSON.stringify(this.props));
+  }
+
+
+  isEqual(newProp, oldProp) {
+    return JSON.stringify(newProp) === JSON.stringify(oldProp);
   }
 
   componentWillReceiveProps(nextProps) {
 
-    if (JSON.stringify(nextProps) === JSON.stringify(this.props)) {
+    if (this.isEqual(nextProps, this.props)) {
       return;
     }
 
     if (nextProps.direction) {
-      console.log('map - direction', nextProps.direction);
       this.updateDirection(nextProps.direction);
     }
 
     if (nextProps.circle) {
       this.drawCircle(nextProps.circle, nextProps.radius);
-      this.props.onUpdated(this.map);
 
     }
-    if (nextProps.center) {
+    if ( !this.isEqual(nextProps.center, this.props.center)) {
       this.updateCenter(nextProps);
+      this.props.onCenterChanged();
     }
     if (nextProps.marker) {
       this.drawMarker(nextProps.marker);
-      this.props.onUpdated(this.map);
     }
   }
 
-  checkRefreshed() {
+  componentWillUnmount() {
+    this.map = null;
+    if (this.props.onMapDestroyed){
+      this.props.onMapDestroyed();
+    }
 
   }
 
@@ -154,9 +161,6 @@ class Gmap extends React.Component {
     };
     //  UIUtils.calculateModalMapHeight(this.props.id);
 
-    if (this.props.marker) {
-      this.drawMarker(this.props.marker);
-    }
 
     if (this.props.radius && this.props.circle) {
       this.renderMap(mapOptions);
@@ -168,6 +172,10 @@ class Gmap extends React.Component {
 
     if (this.props.center) {
       this.updateCenter((this.props));
+    }
+
+    if (this.props.marker) {
+      this.drawMarker(this.props.marker);
     }
     if (this.props.onMapClick) {
       google.maps.event.addListener(this.map, 'click', this.props.onMapClick);
@@ -341,7 +349,6 @@ class Gmap extends React.Component {
       }],
       map: this.map
     });
-
   }
 
   convertTimestampToTime(timestamp) {
@@ -363,15 +370,6 @@ class Gmap extends React.Component {
     str += '<div class="caption"><h5>' + finding.description + '</h5><p>' + this.convertTimestampToTime(finding.timestamp) + '</p></div>';
     str += '</div>';
     return str;
-  }
-
-  componentWillUnmount() {
-    console.log('unmounting....');
-    if (this.katoamis) {
-      this.katoamis.setMap(null);
-    }
-    this.katoamis = null;
-    this.map = null;
   }
 
 }
