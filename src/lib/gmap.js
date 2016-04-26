@@ -62,10 +62,6 @@ class Gmap extends React.Component {
 
   componentWillUnmount() {
     this.map = null;
-    if (this.props.onMapDestroyed){
-      this.props.onMapDestroyed();
-    }
-
   }
 
   updateDirection(direction) {
